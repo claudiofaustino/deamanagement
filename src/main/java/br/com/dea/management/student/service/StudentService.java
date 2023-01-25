@@ -15,11 +15,11 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public List<Student> findAllUsers() {
+    public List<Student> findAllStudents() {
         return this.studentRepository.findAll();
     }
 
-    public Page<Student> findAllUsersPaginated(Integer page, Integer pageSize) {
+    public Page<Student> findAllStudentsPaginated(Integer page, Integer pageSize) {
         return this.studentRepository.findAllPaginated(PageRequest.of(page, pageSize));
     }
 

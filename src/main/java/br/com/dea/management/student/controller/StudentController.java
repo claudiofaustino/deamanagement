@@ -17,20 +17,21 @@ public class StudentController {
 
     @RequestMapping(value = "/student/all", method = RequestMethod.GET)
     public List<Student> getStudentsAllRaw() {
-        return this.studentService.findAllUsers();
+        return this.studentService.findAllStudents();
     }
 
     @RequestMapping(value = "/student/without-pagination", method = RequestMethod.GET)
     public List<StudentDto> getStudentsWithOutPagination() {
-        List<Student> students = this.studentService.findAllUsers();
+        List<Student> students = this.studentService.findAllStudents();
         return StudentDto.fromStudents(students);
     }
 
     @GetMapping("/student")
     public Page<StudentDto> getStudents(@RequestParam Integer page,
-                                        @RequestParam Integer pageSize) {
+                                        @RequestParam Integer pageSize,
+                                        @RequestParam String name) {
 
-        Page<Student> studentsPaged = this.studentService.findAllUsersPaginated(page, pageSize);
+        Page<Student> studentsPaged = this.studentService.findAllStudentsPaginated(page, pageSize);
         Page<StudentDto> students = studentsPaged.map(student -> StudentDto.fromStudent(student));
         return students;
 

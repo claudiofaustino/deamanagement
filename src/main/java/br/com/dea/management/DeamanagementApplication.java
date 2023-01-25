@@ -42,7 +42,7 @@ public class DeamanagementApplication implements CommandLineRunner {
         this.userRepository.deleteAll();
 
         //Creating some students
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 100; i++) {
             User u = new User();
             u.setEmail("email " + i);
             u.setName("name " + i);
