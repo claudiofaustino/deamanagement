@@ -1,13 +1,21 @@
 package br.com.dea.management.student.dto;
 
 import br.com.dea.management.student.domain.Student;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class StudentDto {
 
+    private Long id;
     private String name;
     private String email;
     private String linkedin;
@@ -28,6 +36,7 @@ public class StudentDto {
 
     public static StudentDto fromStudent(Student student) {
         StudentDto studentDto = new StudentDto();
+        studentDto.setId(student.getId());
         studentDto.setName(student.getUser().getName());
         studentDto.setEmail(student.getUser().getEmail());
         studentDto.setLinkedin(student.getUser().getLinkedin());
@@ -38,47 +47,4 @@ public class StudentDto {
         return studentDto;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLinkedin() {
-        return linkedin;
-    }
-
-    public void setLinkedin(String linkedin) {
-        this.linkedin = linkedin;
-    }
-
-    public String getUniversity() {
-        return university;
-    }
-
-    public void setUniversity(String university) {
-        this.university = university;
-    }
-
-    public String getGraduation() {
-        return graduation;
-    }
-
-    public void setGraduation(String graduation) {
-        this.graduation = graduation;
-    }
-
-    public LocalDate getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(LocalDate finishDate) {
-        this.finishDate = finishDate;
-    }
 }
