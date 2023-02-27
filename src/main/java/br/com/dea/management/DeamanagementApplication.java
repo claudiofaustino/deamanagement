@@ -64,7 +64,7 @@ public class DeamanagementApplication implements CommandLineRunner {
                     .user(u)
                     .build();
 
-            this.studentRepository.save(student);
+            //this.studentRepository.save(student);
         }
 
     }
