@@ -51,21 +51,18 @@ public class StudentService {
     }
 
     public Student updateStudent(Long studentId, UpdateStudentRequestDto updateStudentRequestDto) {
-        this.findStudentById(studentId);
+        Student student = this.findStudentById(studentId);
+        User user = student.getUser();
 
-        User user = User.builder()
-                .name(updateStudentRequestDto.getName())
-                .email(updateStudentRequestDto.getEmail())
-                .password(updateStudentRequestDto.getPassword())
-                .linkedin(updateStudentRequestDto.getLinkedin())
-                .build();
+        user.setName(updateStudentRequestDto.getName());
+        user.setEmail(updateStudentRequestDto.getEmail());
+        user.setPassword(updateStudentRequestDto.getPassword());
+        user.setLinkedin(updateStudentRequestDto.getLinkedin());
 
-        Student student = Student.builder()
-                .user(user)
-                .finishDate(updateStudentRequestDto.getFinishDate())
-                .graduation(updateStudentRequestDto.getGraduation())
-                .university(updateStudentRequestDto.getUniversity())
-                .build();
+        student.setUser(user);
+        student.setFinishDate(updateStudentRequestDto.getFinishDate());
+        student.setGraduation(updateStudentRequestDto.getGraduation());
+        student.setUniversity(updateStudentRequestDto.getUniversity());
 
         return this.studentRepository.save(student);
     }

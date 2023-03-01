@@ -59,12 +59,12 @@ class StudentUpdateSuccessCaseTests {
 
         Student student = this.studentRepository.findAll().get(0);
 
-        assertThat(student.getUser().getName()).isEqualTo("name 0");
-        assertThat(student.getUser().getEmail()).isEqualTo("email 0");
-        assertThat(student.getUser().getLinkedin()).isEqualTo("linkedin 0");
-        assertThat(student.getUser().getPassword()).isEqualTo("password 0");
-        assertThat(student.getGraduation()).isEqualTo("graduation 0");
-        assertThat(student.getUniversity()).isEqualTo("university 0");
+        assertThat(student.getUser().getName()).isEqualTo("name");
+        assertThat(student.getUser().getEmail()).isEqualTo("email");
+        assertThat(student.getUser().getLinkedin()).isEqualTo("linkedin");
+        assertThat(student.getUser().getPassword()).isEqualTo("password");
+        assertThat(student.getGraduation()).isEqualTo("graduation");
+        assertThat(student.getUniversity()).isEqualTo("university");
     }
 
 }

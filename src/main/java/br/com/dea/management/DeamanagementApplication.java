@@ -47,7 +47,7 @@ public class DeamanagementApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //Deleting all Users
-        this.userRepository.deleteAll();
+        //this.userRepository.deleteAll();
 
         //Creating some students
         for (int i = 0; i < 100; i++) {
