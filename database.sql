@@ -1,4 +1,4 @@
-CREATE TABLE user (
+CREATE TABLE dea_user (
 	id INTEGER auto_increment NOT NULL,
 	name varchar(256) NOT NULL,
 	email varchar(256) NOT NULL,
@@ -15,4 +15,21 @@ CREATE TABLE student (
 	user_id INTEGER NOT NULL,
 	CONSTRAINT student_PK PRIMARY KEY (id),
 	CONSTRAINT student_FK FOREIGN KEY (user_id) REFERENCES dea_management.`user`(id) ON DELETE CASCADE ON UPDATE CASCADE
-)
+);
+
+CREATE TABLE `position` (
+	id INT auto_increment NOT NULL,
+	description varchar(128) NOT NULL,
+	seniority varchar(128) NOT NULL,
+	CONSTRAINT position_PK PRIMARY KEY (id)
+);
+
+CREATE TABLE employee (
+	id INT auto_increment NOT NULL,
+	position_id INT NOT NULL,
+	employee_type ENUM("INSTRUCTOR","DEVELOPER","RESIDENT","DESIGNER","QA_ANALYST","ADMINISTRATIVE","PL","DTL") NOT NULL,
+	user_id INT NOT NULL,
+	CONSTRAINT employee_PK PRIMARY KEY (id),
+	CONSTRAINT employee_FK FOREIGN KEY (user_id) REFERENCES dea_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT employee_FK_1 FOREIGN KEY (position_id) REFERENCES `position`(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
