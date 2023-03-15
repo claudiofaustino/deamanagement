@@ -8,9 +8,6 @@ import br.com.dea.management.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Component
 public class EmployeeTestUtils {
 
@@ -45,6 +42,17 @@ public class EmployeeTestUtils {
             this.employeeRepository.save(employee);
 
         }
+    }
+
+    public Position createFakePosition(String description, String seniority) {
+
+        Position position = Position.builder()
+                .description(description)
+                .seniority(seniority)
+                .build();
+
+        return this.positionRepository.save(position);
+
     }
 
 }

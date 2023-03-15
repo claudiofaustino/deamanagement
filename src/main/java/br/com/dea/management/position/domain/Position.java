@@ -22,4 +22,5 @@ public class Position {
     @Column
     private String seniority;
 
+
 }
