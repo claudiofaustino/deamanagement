@@ -1,5 +1,6 @@
 package br.com.dea.management.employee.create;
 
+import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.EmployeeType;
 import br.com.dea.management.employee.domain.Employee;
@@ -34,6 +35,9 @@ class EmployeeCreationSuccessCaseTests {
     private EmployeeRepository employeeRepository;
 
     @Autowired
+    private AcademyClassRepository academyClassRepository;
+
+    @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -41,6 +45,7 @@ class EmployeeCreationSuccessCaseTests {
 
     @Test
     void whenRequestingEmployeeCreationWithAValidPayload_thenCreateAEmployeeSuccessfully() throws Exception {
+        this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
         Position position = this.employeeTestUtils.createFakePosition("Dev", "Pleno");
 

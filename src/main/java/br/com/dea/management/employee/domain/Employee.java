@@ -1,5 +1,6 @@
 package br.com.dea.management.employee.domain;
 
+import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.employee.EmployeeType;
 import br.com.dea.management.position.domain.Position;
 import br.com.dea.management.user.domain.User;

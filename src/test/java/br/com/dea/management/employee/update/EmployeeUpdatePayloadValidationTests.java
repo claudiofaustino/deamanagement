@@ -1,6 +1,7 @@
 package br.com.dea.management.employee.update;
 
 import br.com.dea.management.employee.EmployeeTestUtils;
+import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.repository.PositionRepository;
 import org.junit.jupiter.api.Test;
@@ -86,15 +87,18 @@ class EmployeeUpdatePayloadValidationTests {
         this.positionRepository.deleteAll();
         this.employeeTestUtils.createFakeEmployees(1);
 
+        Employee employee = this.employeeRepository.findAll().get(0);
+
+
         String payload = "{" +
                 "\"name\": \"name\"," +
                 "\"email\": \"email\"," +
                 "\"linkedin\": \"linkedin\"," +
                 "\"employeeType\": \"DEVELOPER\"," +
-                "\"position\": 10, " +
+                "\"position\": -10, " +
                 "\"password\": \"password\"" +
                 "}";
-        mockMvc.perform(put("/employee/1")
+        mockMvc.perform(put("/employee/" + employee.getId())
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

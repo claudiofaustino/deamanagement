@@ -53,7 +53,7 @@ class EmployeeUpdateSuccessCaseTests {
                 "\"linkedin\": \"linkedin\"," +
                 "\"employeeType\": \"DEVELOPER\"," +
                 "\"position\": " + position.getId() + "," +
-                "\"password\": \"password\"," +
+                "\"password\": \"password\"" +
                 "}";
         mockMvc.perform(put("/employee/" + employeeBase.getId())
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
