@@ -2,6 +2,7 @@ package br.com.dea.management.academyclass.domain;
 
 import br.com.dea.management.academyclass.ClassType;
 import br.com.dea.management.employee.domain.Employee;
+import br.com.dea.management.student.domain.Student;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +30,7 @@ public class AcademyClass {
     @Enumerated(EnumType.STRING)
     private ClassType classType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id")
     private Employee instructor;
 
