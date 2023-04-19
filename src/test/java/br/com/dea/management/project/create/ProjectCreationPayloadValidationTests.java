@@ -1,10 +1,9 @@
-package br.com.dea.management.employee.update;
+package br.com.dea.management.project.create;
 
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
-import br.com.dea.management.position.repository.PositionRepository;
 import br.com.dea.management.project.repository.ProjectRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,23 +19,23 @@ import java.nio.charset.Charset;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class EmployeeUpdatePayloadValidationTests {
+class ProjectCreationPayloadValidationTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private AcademyClassRepository academyClassRepository;
@@ -44,78 +43,90 @@ class EmployeeUpdatePayloadValidationTests {
     @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
-    @Autowired
-    private PositionRepository positionRepository;
-
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
     @Test
-    void whenPayloadHasRequiredFieldsMissing_thenReturn400AndTheErrors() throws Exception {
+    void whenPayloadRequiredFieldsAreMissing_thenReturn400AndTheErrors() throws Exception {
         String payload = "{}";
-        mockMvc.perform(put("/employee/1")
+        mockMvc.perform(post("/project")
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.details").isArray())
-                .andExpect(jsonPath("$.details", hasSize(3)))
+                .andExpect(jsonPath("$.details", hasSize(7)))
+                .andExpect(jsonPath("$.details[*].field", hasItem("startDate")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Start Date could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("endDate")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("End Date could not be null")))
                 .andExpect(jsonPath("$.details[*].field", hasItem("name")))
                 .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Name could not be null")))
-                .andExpect(jsonPath("$.details[*].field", hasItem("email")))
-                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Email could not be null")))
-                .andExpect(jsonPath("$.details[*].field", hasItem("password")))
-                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Password could not be null")));
+                .andExpect(jsonPath("$.details[*].field", hasItem("externalProductManager")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("External Product Manager could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("productOwnerId")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Product Owner could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("scrumMasterId")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Scrum Master could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("client")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Client could not be null")));
+
     }
 
     @Test
-    void whenEditingAEmployeeThatDoesNotExists_thenReturn404() throws Exception {
-        this.projectRepository.deleteAll();
+    void whenRequestingProjectCreationWithAValidPayloadButWithAProductOwnerThatDoesNotExistsDoesNotExists_thenReturn404Error() throws Exception {
         this.academyClassRepository.deleteAll();
-        this.employeeRepository.deleteAll();
-
-        String payload = "{" +
-                "\"name\": \"name\"," +
-                "\"email\": \"email\"," +
-                "\"linkedin\": \"linkedin\"," +
-                "\"employeeType\": \"DEVELOPER\"," +
-                "\"position\": 1, " +
-                "\"password\": \"password\"" +
-                "}";
-        mockMvc.perform(put("/employee/1")
-                        .contentType(APPLICATION_JSON_UTF8).content(payload))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.details").isArray())
-                .andExpect(jsonPath("$.details", hasSize(1)));
-    }
-
-    @Test
-    void whenEditingAEmployeeWithAPositionThatDoesNotExistsDoesNotExists_thenReturn404() throws Exception {
         this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
-        this.positionRepository.deleteAll();
-        this.employeeTestUtils.createFakeEmployees(1);
 
+        this.employeeTestUtils.createFakeEmployees(1);
         Employee employee = this.employeeRepository.findAll().get(0);
 
-
         String payload = "{" +
+                "\"startDate\": \"2022-01-01\"," +
+                "\"endDate\": \"2024-01-01\"," +
                 "\"name\": \"name\"," +
-                "\"email\": \"email\"," +
-                "\"linkedin\": \"linkedin\"," +
-                "\"employeeType\": \"DEVELOPER\"," +
-                "\"position\": -10, " +
-                "\"password\": \"password\"" +
+                "\"client\": \"client\"," +
+                "\"externalProductManager\": \"manager\"," +
+                "\"scrumMasterId\": " + employee.getId() + "," +
+                "\"productOwnerId\": 200000" +
                 "}";
-        mockMvc.perform(put("/employee/" + employee.getId())
+        mockMvc.perform(post("/project")
                         .contentType(APPLICATION_JSON_UTF8).content(payload))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.details").isArray())
                 .andExpect(jsonPath("$.details", hasSize(1)));
+
+    }
+
+    @Test
+    void whenRequestingProjectCreationWithAValidPayloadButWithAScrumMasterThatDoesNotExistsDoesNotExists_thenReturn404Error() throws Exception {
+        this.academyClassRepository.deleteAll();
+        this.projectRepository.deleteAll();
+        this.employeeRepository.deleteAll();
+
+        this.employeeTestUtils.createFakeEmployees(1);
+        Employee employee = this.employeeRepository.findAll().get(0);
+
+        String payload = "{" +
+                "\"startDate\": \"2022-01-01\"," +
+                "\"endDate\": \"2024-01-01\"," +
+                "\"name\": \"name\"," +
+                "\"client\": \"client\"," +
+                "\"externalProductManager\": \"manager\"," +
+                "\"productOwnerId\": " + employee.getId() + "," +
+                "\"scrumMasterId\": 200000" +
+                "}";
+        mockMvc.perform(post("/project")
+                        .contentType(APPLICATION_JSON_UTF8).content(payload))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details", hasSize(1)));
+
     }
 
 }

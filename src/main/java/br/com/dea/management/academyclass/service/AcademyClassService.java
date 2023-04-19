@@ -44,7 +44,7 @@ public class AcademyClassService {
         return this.academyClassRepository.save(academyClass);
     }
 
-    public AcademyClass updateStudent(Long classId, UpdateAcademyClassRequestDto updateAcademyClassRequestDto) {
+    public AcademyClass updateClass(Long classId, UpdateAcademyClassRequestDto updateAcademyClassRequestDto) {
         AcademyClass academyClass = this.findAcademyClassById(classId);
 
         Employee employee = this.employeeRepository.findById(updateAcademyClassRequestDto.getInstructorId())

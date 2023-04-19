@@ -3,6 +3,7 @@ package br.com.dea.management.employee.get;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.position.repository.PositionRepository;
+import br.com.dea.management.project.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,9 @@ public class EmployeeGetAllTests {
     private PositionRepository positionRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
     @BeforeEach
@@ -51,6 +55,7 @@ public class EmployeeGetAllTests {
 
     @Test
     void whenRequestingEmployeeList_thenReturnListOfEmployeePaginatedSuccessfully() throws Exception {
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.positionRepository.deleteAll();
 

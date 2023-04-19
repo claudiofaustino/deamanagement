@@ -1,10 +1,9 @@
-package br.com.dea.management.employee.get;
+package br.com.dea.management.project.get;
 
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
-import br.com.dea.management.employee.EmployeeTestUtils;
-import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
-import br.com.dea.management.position.repository.PositionRepository;
+import br.com.dea.management.project.ProjectTestUtils;
+import br.com.dea.management.project.domain.Project;
 import br.com.dea.management.project.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,63 +27,60 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-public class EmployeeGetByIdTests {
+public class ProjectGetByIdTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private AcademyClassRepository academyClassRepository;
 
     @Autowired
-    private EmployeeTestUtils employeeTestUtils;
-
-    @Autowired
-    private PositionRepository positionRepository;
+    private ProjectTestUtils projectTestUtils;
 
     @BeforeEach
     void beforeEach() {
-        log.info("Before each test in " + EmployeeGetByIdTests.class.getSimpleName());
+        log.info("Before each test in " + ProjectGetByIdTests.class.getSimpleName());
     }
 
     @BeforeAll
     void beforeSuiteTest() {
-        log.info("Before all tests in " + EmployeeGetByIdTests.class.getSimpleName());
+        log.info("Before all tests in " + ProjectGetByIdTests.class.getSimpleName());
     }
 
     @Test
-    void whenRequestingAnExistentEmployeeById_thenReturnTheEmployeeSuccessfully() throws Exception {
-        this.projectRepository.deleteAll();
+    void whenRequestingAnExistentProjectById_thenReturnTheProjectSuccessfully() throws Exception {
         this.academyClassRepository.deleteAll();
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
-        this.positionRepository.deleteAll();
 
-        this.employeeTestUtils.createFakeEmployees(10);
+        this.projectTestUtils.createFakeProject(1);
 
-        Employee employee = this.employeeRepository.findAll().get(0);
+        Project project = this.projectRepository.findAll().get(0);
 
-        mockMvc.perform(get("/employee/" + employee.getId()))
+        mockMvc.perform(get("/project/" + project.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name", is(employee.getUser().getName())))
-                .andExpect(jsonPath("$.email", is(employee.getUser().getEmail())))
-                .andExpect(jsonPath("$.linkedin", is(employee.getUser().getLinkedin())))
-                .andExpect(jsonPath("$.employeeType", is(employee.getEmployeeType().name())))
-                .andExpect(jsonPath("$.position.description", is(employee.getPosition().getDescription())))
-                .andExpect(jsonPath("$.position.seniority", is(employee.getPosition().getSeniority())));
+                .andExpect(jsonPath("$.startDate").exists())
+                .andExpect(jsonPath("$.endDate").exists())
+                .andExpect(jsonPath("$.name", is("name 0")))
+                .andExpect(jsonPath("$.client", is("client 0")))
+                .andExpect(jsonPath("$.externalProductManager", is("manager 0")))
+                .andExpect(jsonPath("$.productOwner.name", is("name 1")))
+                .andExpect(jsonPath("$.scrumMaster.name", is("name 0")));
 
     }
 
     @Test
     void whenRequestingByIdAndIdIsNotANumber_thenReturnTheBadRequestError() throws Exception {
 
-        mockMvc.perform(get("/employee/xx"))
+        mockMvc.perform(get("/project/xx"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
@@ -93,9 +89,9 @@ public class EmployeeGetByIdTests {
     }
 
     @Test
-    void whenRequestingAnNonExistentEmployeeById_thenReturnTheNotFoundError() throws Exception {
+    void whenRequestingAnNonExistentProjectById_thenReturnTheNotFoundError() throws Exception {
 
-        mockMvc.perform(get("/employee/5000"))
+        mockMvc.perform(get("/project/5000"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())

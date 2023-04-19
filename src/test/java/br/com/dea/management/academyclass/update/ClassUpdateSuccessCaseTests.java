@@ -7,6 +7,7 @@ import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
 import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
+import br.com.dea.management.project.repository.ProjectRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ class ClassUpdateSuccessCaseTests {
     private EmployeeRepository employeeRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
     private EmployeeTestUtils employeeTestUtils;
 
     @Autowired
@@ -50,6 +54,7 @@ class ClassUpdateSuccessCaseTests {
 
     @Test
     void whenRequestingAcademyClassUpdateWithAValidPayload_thenUpdateAAcademyClassSuccessfully() throws Exception {
+        this.projectRepository.deleteAll();
         this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
 

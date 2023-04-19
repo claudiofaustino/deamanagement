@@ -90,7 +90,7 @@ public class AcademyClassController {
     public void updateEmployee(@PathVariable Long id, @Valid @RequestBody UpdateAcademyClassRequestDto updateAcademyClassRequestDto) {
         log.info(String.format("Updating Class : Payload : %s", updateAcademyClassRequestDto));
 
-        AcademyClass academyClass = this.academyClassService.updateStudent(id, updateAcademyClassRequestDto);
+        AcademyClass academyClass = this.academyClassService.updateClass(id, updateAcademyClassRequestDto);
 
         log.info(String.format("Class updated successfully : id : %s", academyClass.getId()));
     }

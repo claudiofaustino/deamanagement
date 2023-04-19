@@ -5,6 +5,7 @@ import br.com.dea.management.academyclass.ClassType;
 import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.repository.EmployeeRepository;
+import br.com.dea.management.project.repository.ProjectRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ class ClassUpdatePayloadValidationTests {
 
     @Autowired
     private AcademyClassRepository academyClassRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Autowired
     private AcademyTestUtils academyClassTestUtils;
@@ -85,6 +89,7 @@ class ClassUpdatePayloadValidationTests {
 
     @Test
     void whenEditingAnAcademyClassWithAnEmployeeThatDoesNotExists_thenReturn404() throws Exception {
+        this.projectRepository.deleteAll();
         this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.academyClassTestUtils.createFakeClass(1, LocalDate.now(), LocalDate.now(), ClassType.DEVELOPER);

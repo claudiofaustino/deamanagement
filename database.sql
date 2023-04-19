@@ -46,3 +46,17 @@ CREATE TABLE academy_class (
 
 ALTER TABLE student ADD academy_class_id INT NULL;
 ALTER TABLE student ADD CONSTRAINT student_FK_1 FOREIGN KEY (academy_class_id) REFERENCES academy_class(id) ON DELETE SET NULL ON UPDATE SET NULL;
+
+CREATE TABLE project (
+	id integer auto_increment NOT NULL,
+	name varchar(256) NOT NULL,
+	client varchar(100) NOT NULL,
+	external_product_manager varchar(256) NOT NULL,
+	start_date date NOT NULL,
+	end_date date NOT NULL,
+	product_owner_id INTEGER NULL,
+	scrum_master_id integer NULL,
+	CONSTRAINT project_PK PRIMARY KEY (id),
+	CONSTRAINT project_FK FOREIGN KEY (product_owner_id) REFERENCES employee(id) ON DELETE SET NULL ON UPDATE SET NULL,
+	CONSTRAINT project_FK_1 FOREIGN KEY (scrum_master_id) REFERENCES employee(id) ON DELETE SET NULL ON UPDATE SET NULL
+);
