@@ -139,32 +139,4 @@ class ProjectUpdatePayloadValidationTests {
 
     }
 
-    @Test
-    void whenRequestingProjectCreationWithAValidPayloadButWithAScrumMasterThatDoesNotExistsDoesNotExists_thenReturn404Error() throws Exception {
-        this.academyClassRepository.deleteAll();
-        this.projectRepository.deleteAll();
-        this.employeeRepository.deleteAll();
-
-        this.employeeTestUtils.createFakeEmployees(1);
-        Employee employee = this.employeeRepository.findAll().get(0);
-
-        String payload = "{" +
-                "\"startDate\": \"2022-01-01\"," +
-                "\"endDate\": \"2024-01-01\"," +
-                "\"name\": \"name\"," +
-                "\"client\": \"client\"," +
-                "\"externalProductManager\": \"manager\"," +
-                "\"productOwnerId\": " + employee.getId() + "," +
-                "\"scrumMasterId\": 200000" +
-                "}";
-        mockMvc.perform(post("/project")
-                        .contentType(APPLICATION_JSON_UTF8).content(payload))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.details").isArray())
-                .andExpect(jsonPath("$.details", hasSize(1)));
-
-    }
-
 }

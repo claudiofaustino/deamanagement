@@ -50,7 +50,7 @@ public class ProjectService {
         return this.projectRepository.save(project);
     }
 
-    public Project updateClass(Long classId, UpdateProjectRequestDto updateProjectRequestDto) {
+    public Project updateProject(Long classId, UpdateProjectRequestDto updateProjectRequestDto) {
         Project project = this.findProjectById(classId);
 
         Employee scrumMaster = this.employeeRepository.findById(updateProjectRequestDto.getScrumMasterId())

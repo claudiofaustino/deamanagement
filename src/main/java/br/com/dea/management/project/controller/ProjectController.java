@@ -71,7 +71,7 @@ public class ProjectController {
             @ApiResponse(responseCode = "500", description = "Error creating project"),
     })
     @PostMapping("/project")
-    public void createClass(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto) {
+    public void createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto) {
         log.info(String.format("Creating Project : Payload : %s", createProjectRequestDto));
 
         Project Project = this.ProjectService.createProject(createProjectRequestDto);
@@ -87,10 +87,10 @@ public class ProjectController {
             @ApiResponse(responseCode = "500", description = "Error updating Project"),
     })
     @PutMapping("/project/{id}")
-    public void updateEmployee(@PathVariable Long id, @Valid @RequestBody UpdateProjectRequestDto updateProjectRequestDto) {
+    public void updateProject(@PathVariable Long id, @Valid @RequestBody UpdateProjectRequestDto updateProjectRequestDto) {
         log.info(String.format("Updating Class : Payload : %s", updateProjectRequestDto));
 
-        Project Project = this.ProjectService.updateClass(id, updateProjectRequestDto);
+        Project Project = this.ProjectService.updateProject(id, updateProjectRequestDto);
 
         log.info(String.format("Class updated successfully : id : %s", Project.getId()));
     }
